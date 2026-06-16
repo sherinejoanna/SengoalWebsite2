@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sengoal — Circular Today. Greener Tomorrow.</title>
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --forest:#0E3D2F;
+    --forest-deep:#082018;
+    --leaf:#2E7D32;
+    --sage:#A8C66C;
+    --gold:#F2B233;
+    --cream:#F4F2E8;
+    --paper:#FBFAF5;
+    --ink:#0C2A20;
+    --ink-soft:#42584F;
+    --line:rgba(14,61,47,.13);
+    /* tweakable */
+    --accent:var(--gold);
+    --accent-ink:#0C2A20;
+    --bg:var(--cream);
+    --h-scale:1;
+
+    --pad-x:clamp(20px,5vw,64px);
+    --sect-y:clamp(100px,12vw,160px);
+    --r:0px;
+    --font-serif: "Playfair Display", Georgia, serif;
+    --font-sans: "Satoshi", system-ui, -apple-system, sans-serif;
+    font-family: var(--font-sans);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    font-size:17px;line-height:1.7;}
+  img{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  h1,h2,h3,h4{margin:0;font-family:var(--font-serif);font-weight:500;letter-spacing:-.01em;line-height:1.1;color:var(--ink);text-wrap:balance;}
+  p{margin:0;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--pad-x);padding-right:var(--pad-x);}
+  .eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:.78rem;font-weight:700;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--leaf);}
+  .eyebrow::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:2px;}
+  .eyebrow.on-dark{color:var(--sage);}
+  .lead{font-size:clamp(1.05rem,1.6vw,1.3rem);line-height:1.6;color:var(--ink-soft);max-width:54ch;font-weight:500;}
+  .muted{color:var(--ink-soft);}
+
+  .sect-title{font-size:calc(clamp(2.1rem,4.2vw,3.25rem) * var(--h-scale));margin:18px 0 0;}
+
+  /* ============ BUTTONS ============ */
+  .btn{display:inline-flex;align-items:center;gap:9px;font-weight:500;font-size:.95rem;
+    letter-spacing:.02em;padding:12px 24px;border-radius:0px;border:1px solid transparent;
+    cursor:pointer;transition:background .4s ease,color .4s ease,border-color .4s ease;white-space:nowrap;font-family:var(--font-sans);}
+  .btn:hover{}
+  .btn-primary{background:var(--forest);color:#fff;}
+  .btn-primary:hover{background:var(--ink);}
+  .btn-ghost{border-color:var(--forest);color:var(--forest);background:transparent;}
+  .btn-ghost:hover{background:var(--forest);color:#fff;}
+  .btn-gold{background:var(--accent);color:var(--accent-ink);}
+  .btn-gold:hover{background:#dca029;}
+  .btn-on-dark{border-color:rgba(255,255,255,.5);color:#fff;}
+  .btn-on-dark:hover{background:#fff;color:var(--forest);border-color:#fff;}
+  .btn .ar{font-size:1.05em;line-height:0;}
+
+  /* ============ NAV ============ */
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:100;
+    transition:background .3s,box-shadow .3s,padding .3s;padding:18px 0;}
+  header.nav.scrolled{background:rgba(244,242,232,.86);
+    -webkit-backdrop-filter:blur(16px) saturate(150%);backdrop-filter:blur(16px) saturate(150%);
+    box-shadow:0 1px 0 var(--line);padding:11px 0;}
+  .nav-in{display:flex;align-items:center;gap:28px;}
+  .brand{display:flex;align-items:center;gap:11px;}
+  .brand img{height:34px;width:auto;}
+  .brand .wm{display:flex;flex-direction:column;line-height:1;}
+  .brand .wm b{font-size:1.32rem;font-weight:900;color:var(--forest);letter-spacing:-.02em;}
+  .brand .wm span{font-size:.52rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--leaf);margin-top:3px;}
+  .nav-links{display:flex;align-items:center;gap:26px;margin-left:8px;}
+  .nav-links a{font-size:.92rem;font-weight:600;color:var(--ink);opacity:.82;transition:opacity .18s,color .18s;}
+  .nav-links a:hover{opacity:1;color:var(--leaf);}
+  .nav-cta{display:flex;align-items:center;gap:12px;margin-left:auto;}
+  .nav-cta .btn{padding:10px 18px;font-size:.86rem;}
+  .hamb{display:none;width:46px;height:46px;border:1px solid var(--line);border-radius:0;
+    background:rgba(255,255,255,.5);cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;}
+  .hamb span{width:20px;height:2px;background:var(--forest);border-radius:2px;transition:.25s;}
+  .hamb.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .hamb.open span:nth-child(2){opacity:0;}
+  .hamb.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-mobile-cta{display:none;margin-left:auto;align-items:center;gap:10px;}
+  .nav-mobile-cta .btn{padding:9px 14px;font-size:.82rem;}
+  /* light treatment while nav is transparent over the dark hero */
+  header.nav:not(.scrolled) .brand .wm b{color:#fff;}
+  header.nav:not(.scrolled) .brand .wm span{color:var(--sage);}
+  header.nav:not(.scrolled) .nav-links a{color:#fff;opacity:.92;}
+  header.nav:not(.scrolled) .nav-links a:hover{color:var(--sage);}
+  header.nav:not(.scrolled) .btn-ghost{border-color:rgba(255,255,255,.55);color:#fff;}
+  header.nav:not(.scrolled) .btn-ghost:hover{background:#fff;color:var(--forest);border-color:#fff;}
+  header.nav:not(.scrolled) .hamb{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.32);}
+  header.nav:not(.scrolled) .hamb span{background:#fff;}
+  header.nav:not(.scrolled) .nav-mobile-cta .btn-primary{background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.5);color:#fff;}
+  header.nav:not(.scrolled) .nav-mobile-cta .btn-primary:hover{background:rgba(255,255,255,.26);}
+
+  /* mobile menu */
+  .mobile-menu{position:fixed;inset:0 0 0 auto;width:min(86vw,360px);z-index:99;
+    background:var(--forest);color:#fff;transform:translateX(100%);transition:transform .34s cubic-bezier(.4,0,.1,1);
+    padding:96px 32px 32px;display:flex;flex-direction:column;gap:6px;box-shadow:-20px 0 60px rgba(0,0,0,.3);}
+  .mobile-menu.open{transform:translateX(0);}
+  .mobile-menu a{font-size:1.25rem;font-weight:700;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.12);color:#fff;}
+  .mobile-menu .mm-cta{display:flex;flex-direction:column;gap:12px;margin-top:24px;}
+  .mobile-menu .mm-cta .btn{justify-content:center;}
+  .scrim-nav{position:fixed;inset:0;background:rgba(8,32,24,.5);z-index:98;opacity:0;visibility:hidden;transition:.3s;}
+  .scrim-nav.open{opacity:1;visibility:visible;}
+
+  /* ============ FLOATING CTA ============ */
+  .fab-partner{position:fixed;bottom:28px;right:28px;z-index:97;
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--font-sans);font-weight:500;font-size:.9rem;
+    padding:13px 22px;border-radius:0;
+    background:var(--forest);color:#fff;border:none;cursor:pointer;
+    opacity:0;visibility:hidden;transform:translateY(12px);
+    transition:opacity .6s ease,visibility .6s ease,transform .6s ease,background .4s ease;}
+  .fab-partner.show{opacity:1;visibility:visible;transform:translateY(0);}
+  .fab-partner:hover{background:var(--ink);}
+  .fab-partner .fab-ar{font-size:1.05em;}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;overflow:hidden;}
+  .hero .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+  .hero .grade{position:absolute;inset:0;z-index:1;
+    background:linear-gradient(76deg,rgba(6,22,15,.94) 0%,rgba(6,22,15,.78) 34%,rgba(6,22,15,.34) 66%,rgba(6,22,15,.12) 100%),
+               linear-gradient(0deg,rgba(6,22,15,.86) 0%,rgba(6,22,15,.1) 46%);}
+  .hero .glow{display:none;}
+  .hero-in{position:relative;z-index:3;color:#fff;padding-top:140px;padding-bottom:clamp(40px,6vw,72px);width:100%;}
+  .hero h1{color:#fff;font-size:calc(clamp(2.5rem,6.4vw,5rem) * var(--h-scale));line-height:.99;max-width:17ch;}
+  .hero h1 .g{color:var(--accent);}
+  .hero .sub{font-size:clamp(1.05rem,1.7vw,1.35rem);color:#D7E5CD;font-weight:500;margin-top:24px;max-width:46ch;}
+  .hero .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px;}
+  .hero .rail{margin-top:clamp(40px,5vw,60px);display:flex;flex-wrap:wrap;gap:0;border-top:1px solid rgba(255,255,255,.2);}
+  .hero .rail .m{padding:22px 40px 6px 0;}
+  .hero .rail .m + .m{padding-left:40px;border-left:1px solid rgba(255,255,255,.16);}
+  .hero .rail .v{font-family:var(--font-serif);font-size:clamp(1.5rem,2.5vw,2.1rem);font-weight:500;color:var(--accent);letter-spacing:-.01em;line-height:1;}
+  .hero .rail .k{font-size:.82rem;font-weight:700;letter-spacing:.04em;color:#B9CDAC;margin-top:8px;text-transform:uppercase;}
+  .scrolldown{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:4;color:rgba(255,255,255,.6);
+    font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:9px;}
+  .scrolldown .arr{width:1px;height:30px;background:linear-gradient(rgba(255,255,255,.6),transparent);animation:sd 1.8s ease-in-out infinite;}
+  @keyframes sd{0%,100%{opacity:.3;transform:scaleY(.6);}50%{opacity:1;transform:scaleY(1);}}
+
+  /* ============ SECTION SHELL ============ */
+  section.block{padding:var(--sect-y) 0;position:relative;}
+  .sect-head{max-width:60ch;}
+  .sect-head .lead{margin-top:18px;}
+
+  /* ============ PROBLEM ============ */
+  .problem{background:var(--bg);}
+  .prob-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(32px,5vw,72px);align-items:center;margin-top:clamp(40px,5vw,64px);}
+  .prob-stats{display:flex;flex-direction:column;gap:6px;}
+  .pstat{padding:26px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:baseline;}
+  .pstat:last-child{border-bottom:1px solid var(--line);}
+  .pstat .big{font-family:var(--font-serif);font-size:clamp(2.4rem,4.4vw,3.4rem);font-weight:500;color:var(--forest);letter-spacing:-.01em;line-height:.9;white-space:nowrap;}
+  .pstat .big.gold{color:var(--accent);}
+  .pstat .txt h4{font-size:1.06rem;}
+  .pstat .txt p{color:var(--ink-soft);margin-top:5px;font-size:.97rem;}
+  .prob-media{position:relative;border-radius:var(--r);overflow:hidden;aspect-ratio:4/5;}
+  .prob-media img{width:100%;height:100%;object-fit:cover;}
+  .prob-media .tag{position:absolute;left:18px;bottom:18px;right:18px;color:#fff;font-size:.82rem;font-weight:500;
+    background:linear-gradient(0deg,rgba(6,22,15,.85),transparent);padding:60px 14px 14px;border-radius:0;}
+  .closer{font-family:var(--font-serif);margin-top:clamp(40px,5vw,60px);font-size:clamp(1.5rem,3.2vw,2.4rem);font-weight:500;color:var(--forest);letter-spacing:-.01em;max-width:24ch;}
+  .closer .g{color:var(--accent);}
+
+  /* ============ LOOP ============ */
+  .loop{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .loop-steps{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:clamp(40px,5vw,60px);counter-reset:s;}
+  .lstep{position:relative;padding:24px 18px;border-radius:16px;background:#fff;border:1px solid var(--line);}
+  .lstep .ico{width:50px;height:50px;border-radius:0;background:var(--cream);color:var(--leaf);display:flex;align-items:center;justify-content:center;}
+  .lstep .ico svg{width:25px;height:25px;}
+  .lstep .n{position:absolute;top:18px;right:18px;font-size:.82rem;font-weight:800;color:var(--sage);letter-spacing:.05em;}
+  .lstep h4{margin-top:18px;font-size:1.04rem;}
+  .lstep p{margin-top:7px;color:var(--ink-soft);font-size:.9rem;line-height:1.5;}
+  .lstep::after{content:"";position:absolute;top:48px;right:-9px;width:18px;height:18px;
+    border-top:2px solid var(--sage);border-right:2px solid var(--sage);transform:rotate(45deg);z-index:2;}
+  .lstep:last-child::after{display:none;}
+  .moat{margin-top:clamp(28px,4vw,40px);display:grid;grid-template-columns:1.4fr 1fr;gap:clamp(28px,4vw,48px);align-items:center;
+    background:var(--forest);color:#EAF2E2;border-radius:var(--r);padding:clamp(28px,4vw,46px);overflow:hidden;}
+  .moat h3{color:#fff;font-size:clamp(1.4rem,2.6vw,2rem);}
+  .moat p{color:#C9DBBE;margin-top:14px;font-size:1.02rem;line-height:1.6;}
+  .moat .chiprow{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px;}
+  .moat .chip2{font-size:.8rem;font-weight:700;letter-spacing:.02em;background:rgba(168,198,108,.16);color:var(--sage);
+    padding:8px 14px;border-radius:999px;border:1px solid rgba(168,198,108,.28);}
+  .moat-media{border-radius:0;overflow:hidden;aspect-ratio:1/1;}
+  .moat-media img{width:100%;height:100%;object-fit:cover;}
+
+  /* ============ PRODUCTS ============ */
+  .prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-top:clamp(40px,5vw,60px);}
+  .pcard{border-radius:var(--r);overflow:hidden;background:#fff;border:1px solid var(--line);
+    display:flex;flex-direction:column;transition:border-color .6s ease;}
+  .pcard:hover{border-color:var(--ink-soft);}
+  .pcard .ph{position:relative;aspect-ratio:16/9;overflow:hidden;}
+  .pcard .ph img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease;}
+  .pcard:hover .ph img{transform:scale(1.05);}
+  .badge{position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:0;}
+  .badge.live{background:var(--leaf);color:#fff;}
+  .badge.pending{background:rgba(242,178,51,.92);color:#3a2a06;}
+  .badge .dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
+  .pcard .body{padding:24px 24px 26px;flex:1;display:flex;flex-direction:column;}
+  .pcard .body h3{font-size:1.32rem;}
+  .pcard .body .role{font-size:.78rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf);margin-top:6px;}
+  .pcard .body p{color:var(--ink-soft);margin-top:12px;font-size:.97rem;}
+  /* temple mini loop */
+  .temple-loop{margin-top:20px;padding-top:20px;border-top:1px solid var(--line);}
+  .temple-loop .tl-tag{font-size:.85rem;font-style:italic;color:var(--forest);font-weight:700;}
+  .tl-steps{display:flex;align-items:stretch;gap:8px;margin-top:14px;}
+  .tl-steps .tl{flex:1;text-align:center;}
+  .tl-steps .tl .num{font-size:.72rem;font-weight:800;color:var(--sage);}
+  .tl-steps .tl .nm{font-size:.8rem;font-weight:700;color:var(--ink);margin-top:4px;line-height:1.2;}
+  .tl-steps .sep{align-self:center;color:var(--sage);font-weight:900;}
+  .loi{margin-top:16px;display:inline-flex;align-items:center;gap:9px;background:var(--cream);border:1px solid var(--line);
+    border-radius:12px;padding:11px 15px;font-size:.86rem;font-weight:700;color:var(--forest);}
+  .loi svg{width:17px;height:17px;color:var(--leaf);}
+
+  /* ============ KITCHEN TO CLOUD (dark feature) ============ */
+  .saf{position:relative;color:#fff;overflow:hidden;}
+  .saf .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+  .saf .grade{position:absolute;inset:0;z-index:1;
+    background:linear-gradient(86deg,rgba(6,22,15,.95) 0%,rgba(6,22,15,.86) 44%,rgba(6,22,15,.55) 78%,rgba(6,22,15,.32) 100%);}
+  .saf-in{position:relative;z-index:2;}
+  .saf h2{color:#fff;}
+  .saf .lead{color:#CFE0C2;}
+  .saf-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:clamp(36px,5vw,52px);max-width:780px;}
+  .saf-stats .s .v{font-family:var(--font-serif);font-size:clamp(1.8rem,3.4vw,2.7rem);font-weight:500;color:var(--accent);letter-spacing:-.01em;line-height:1;}
+  .saf-stats .s .k{font-size:.86rem;color:#C9DBBE;margin-top:10px;font-weight:600;line-height:1.4;}
+  .saf-partners{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(32px,4vw,44px);}
+  .ppill{display:flex;flex-direction:column;gap:3px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.16);
+    border-radius:14px;padding:14px 18px;min-width:200px;}
+  .ppill .pt{font-weight:800;font-size:1rem;color:#fff;}
+  .ppill .ps{font-size:.82rem;color:var(--sage);font-weight:600;}
+  .ruco{margin-top:28px;display:inline-flex;align-items:center;gap:11px;background:rgba(242,178,51,.14);
+    border:1px solid rgba(242,178,51,.4);border-radius:14px;padding:14px 18px;font-size:.95rem;font-weight:600;color:#FBE6C4;max-width:60ch;}
+  .ruco svg{width:20px;height:20px;color:var(--accent);flex:none;}
+  .saf .align{margin-top:18px;font-size:.85rem;color:#A9C29A;letter-spacing:.02em;}
+
+  /* ============ TECHNOLOGY ============ */
+  .tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);align-items:center;margin-top:clamp(40px,5vw,60px);}
+  .tech-media{border-radius:var(--r);overflow:hidden;aspect-ratio:5/4;position:relative;}
+  .tech-media img{width:100%;height:100%;object-fit:cover;}
+  .tech-media .plant{position:absolute;left:16px;bottom:16px;right:16px;background:rgba(8,32,24,.78);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);border-radius:0;padding:14px 16px;color:#fff;}
+  .tech-media .plant b{display:block;font-size:.95rem;}
+  .tech-media .plant span{font-size:.82rem;color:var(--sage);}
+  .tlist{display:flex;flex-direction:column;gap:8px;}
+  .titem{display:grid;grid-template-columns:auto 1fr;gap:18px;padding:22px 0;border-top:1px solid var(--line);}
+  .titem:last-child{border-bottom:1px solid var(--line);}
+  .titem .ico{width:48px;height:48px;border-radius:0;background:var(--cream);color:var(--leaf);display:flex;align-items:center;justify-content:center;}
+  .titem .ico svg{width:24px;height:24px;}
+  .titem h4{font-size:1.1rem;}
+  .titem p{color:var(--ink-soft);margin-top:6px;font-size:.95rem;}
+
+  /* ============ TRACTION ============ */
+  .traction{background:var(--paper);border-top:1px solid var(--line);}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:clamp(40px,5vw,60px);}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;}
+  .kpi .v{font-family:var(--font-serif);font-size:clamp(1.35rem,2vw,1.7rem);font-weight:500;color:var(--forest);letter-spacing:-.01em;line-height:1.05;}
+  .kpi .k{font-size:.85rem;color:var(--ink-soft);margin-top:8px;font-weight:600;}
+  .ladder{margin-top:clamp(36px,5vw,52px);display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,48px);align-items:center;}
+  .steps3{display:flex;flex-direction:column;gap:14px;}
+  .lr{display:flex;align-items:center;gap:18px;}
+  .lr .num{font-family:var(--font-serif);font-size:clamp(1.6rem,3vw,2.3rem);font-weight:500;letter-spacing:-.01em;color:var(--forest);min-width:3.3ch;}
+  .lr.now .num{color:var(--accent);}
+  .lr .meta b{display:block;font-size:1rem;}
+  .lr .meta span{font-size:.86rem;color:var(--ink-soft);}
+  .lr .bar{flex:1;height:7px;border-radius:999px;background:var(--cream);overflow:hidden;}
+  .lr .bar i{display:block;height:100%;background:var(--leaf);border-radius:999px;}
+  .lr.now .bar i{background:var(--accent);}
+  .health{background:var(--forest);color:#EAF2E2;border-radius:var(--r);padding:clamp(28px,4vw,42px);}
+  .health h3{color:#fff;font-size:clamp(1.4rem,2.6vw,1.9rem);}
+  .health ul{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-direction:column;gap:13px;}
+  .health li{display:grid;grid-template-columns:auto 1fr;gap:13px;font-size:.98rem;color:#CADCBF;}
+  .health li svg{width:20px;height:20px;color:var(--sage);margin-top:2px;}
+  .cats{margin-top:24px;display:flex;flex-wrap:wrap;gap:8px;}
+  .cats span{font-size:.78rem;font-weight:700;color:var(--sage);background:rgba(168,198,108,.14);border:1px solid rgba(168,198,108,.26);
+    padding:7px 13px;border-radius:999px;}
+
+  /* ============ VISION (dark) ============ */
+  .vision{background:var(--forest-deep);color:#fff;position:relative;overflow:hidden;}
+  .vision .mark-wm{position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:560px;opacity:.05;z-index:0;}
+  .vision-in{position:relative;z-index:1;}
+  .vision h2{color:#fff;}
+  .vmkt{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:clamp(36px,5vw,52px);}
+  .vmkt .s{border-top:2px solid rgba(168,198,108,.4);padding-top:18px;}
+  .vmkt .s .v{font-family:var(--font-serif);font-size:clamp(1.7rem,3vw,2.5rem);font-weight:500;color:var(--accent);letter-spacing:-.01em;line-height:1;}
+  .vmkt .s .k{font-size:.86rem;color:#B9CDAC;margin-top:10px;font-weight:600;}
+  .phases{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:clamp(40px,5vw,60px);}
+  .phase{padding:0 clamp(20px,2.5vw,36px);border-left:1px solid rgba(255,255,255,.16);}
+  .phase:first-child{padding-left:0;border-left:none;}
+  .phase .pl{font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);}
+  .phase.now .pl{color:var(--accent);}
+  .phase h4{font-size:clamp(1.3rem,2.2vw,1.7rem);color:#fff;margin:14px 0 0;}
+  .phase p{color:#C9DBBE;margin-top:12px;font-size:.97rem;line-height:1.6;}
+  .vclose{margin-top:clamp(48px,6vw,72px);padding-top:clamp(36px,4vw,48px);border-top:1px solid rgba(255,255,255,.16);
+    font-size:clamp(1.6rem,3.6vw,3rem);font-weight:900;letter-spacing:-.03em;color:#fff;max-width:22ch;line-height:1.05;}
+  .vclose .g{color:var(--accent);}
+
+  /* ============ TEAM ============ */
+  .founders{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:clamp(40px,5vw,60px);}
+  .fcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:30px;display:flex;flex-direction:column;gap:14px;}
+  .fcard .nm{font-size:1.3rem;font-weight:900;margin:0;}
+  .fcard .rl{font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--leaf);margin-top:4px;}
+  .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:22px;}
+  .tmember{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px;}
+  .tmember .nm{font-size:1.1rem;font-weight:900;margin-top:16px;}
+  .tmember .rl{font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--leaf);margin-top:5px;}
+  .tm-photo,.fc-photo{width:100%;background:var(--paper);border:1px solid var(--line);border-radius:0;
+    display:flex;align-items:center;justify-content:center;color:var(--sage);overflow:hidden;}
+  .tm-photo{aspect-ratio:3/4;}
+  .fc-photo{aspect-ratio:3/4;}
+  .tm-photo svg,.fc-photo svg{width:36%;height:36%;opacity:.3;}
+  .fc-photo img,.tm-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;}
+  .fc-photo:has(img),.tm-photo:has(img){border:1px solid var(--line);background:transparent;}
+
+  /* ============ CTA / CONTACT ============ */
+  .cta-band{background:var(--accent);color:var(--accent-ink);text-align:center;}
+  .cta-band h2{color:var(--accent-ink);font-size:clamp(2rem,4.4vw,3.4rem);}
+  .cta-band p{margin:16px auto 0;max-width:48ch;font-size:1.1rem;font-weight:500;color:#42330c;}
+  .cta-band .cta{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:32px;}
+  .cta-band .btn-dark{background:var(--forest);color:#fff;}
+  .cta-band .btn-dark:hover{box-shadow:0 12px 28px rgba(14,61,47,.3);}
+  .cta-band .btn-lineDark{border-color:var(--forest);color:var(--forest);}
+  .cta-band .btn-lineDark:hover{background:var(--forest);color:#fff;}
+  .contact-meta{margin-top:34px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;font-size:.92rem;font-weight:600;color:#42330c;}
+  .contact-meta a{text-decoration:none;border-bottom:1px solid rgba(66,51,12,.3);}
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--forest-deep);color:#C9DBBE;padding:clamp(56px,7vw,80px) 0 36px;}
+  .foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;}
+  .foot-brand img{height:46px;}
+  .foot-brand p{margin-top:18px;font-size:.92rem;max-width:34ch;color:#A9C29A;}
+  .foot-col h5{font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);margin:0 0 16px;font-weight:800;}
+  .foot-col a,.foot-col p{display:block;font-size:.92rem;color:#C9DBBE;margin-bottom:11px;}
+  .foot-col a:hover{color:#fff;}
+  .foot-bot{margin-top:clamp(40px,5vw,56px);padding-top:24px;border-top:1px solid rgba(255,255,255,.12);
+    display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;font-size:.82rem;color:#8FA982;}
+
+  /* ============ REVEAL ============ */
+  .reveal{opacity:0;transition:opacity 1.2s cubic-bezier(.2,.6,.2,1);}
+  .reveal.in{opacity:1;}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none;transition:none;}
+    .scrolldown .arr{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width:1040px){
+    .nav-links{display:none;}
+    .nav-cta{display:none;}
+    .hamb{display:flex;margin-left:0;}
+    .nav-mobile-cta{display:flex;}
+    .prod-grid{gap:20px;}
+    .team-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:860px){
+    .prob-grid,.tech-grid,.ladder,.moat{grid-template-columns:1fr;}
+    .prob-media{aspect-ratio:16/10;}
+    .moat-media{aspect-ratio:1/1;}
+    .loop-steps{grid-template-columns:repeat(2,1fr);}
+    .lstep::after{display:none;}
+    .prod-grid{grid-template-columns:1fr;}
+    .saf-stats{grid-template-columns:1fr;gap:24px;max-width:none;}
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .vmkt{grid-template-columns:1fr;gap:24px;}
+    .phases{grid-template-columns:1fr;}
+    .phase{padding:24px 0;border-left:none;border-top:1px solid rgba(255,255,255,.16);}
+    .phase:first-child{padding-top:0;border-top:none;}
+    .founders{grid-template-columns:1fr;}
+    .foot-top{grid-template-columns:1fr;gap:32px;}
+  }
+  @media (max-width:520px){
+    body{font-size:16px;}
+    .team-grid{grid-template-columns:1fr;}
+    .kpi-row{grid-template-columns:1fr;}
+    .loop-steps{grid-template-columns:1fr;}
+    .hero .rail{display:grid;grid-template-columns:repeat(3,1fr);}
+    .hero .rail .m{padding:14px 6px 6px 0;min-width:0;}
+    .hero .rail .m + .m{padding-left:6px;}
+    .hero .rail .v{font-size:clamp(.9rem,4.2vw,1.3rem);}
+    .hero .rail .k{font-size:.66rem;}
+    .hero-in{padding-bottom:clamp(60px,9vw,80px);}
+    .tl-steps{flex-wrap:wrap;}
+    .tl-steps .sep{display:none;}
+    .tl-steps .tl{flex:1 0 40%;text-align:left;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Sengoal home">
+      <img src="assets/mark_transparent.png" alt="Sengoal" />
+      <span class="wm"><b>Sengoal</b><span>Circular Today. Greener Tomorrow.</span></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#problem">The Problem</a>
+      <a href="#loop">The Loop</a>
+      <a href="#products">Products</a>
+      <a href="#technology">Technology</a>
+      <a href="#vision">Vision</a>
+      <a href="#team">Team</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="https://sengoalpledgeform.netlify.app/">Take the Pledge</a>
+    </div>
+    <div class="nav-mobile-cta">
+    </div>
+    <button class="hamb" id="hamb" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="scrim-nav" id="navScrim"></div>
+<aside class="mobile-menu" id="mobileMenu">
+  <a href="#problem">The Problem</a>
+  <a href="#loop">The Loop</a>
+  <a href="#products">Products</a>
+  <a href="#technology">Technology</a>
+  <a href="#vision">Vision</a>
+  <a href="#team">Team</a>
+  <div class="mm-cta">
+    <a class="btn btn-gold" href="https://sengoalpledgeform.netlify.app/">Take the Pledge</a>
+    <a class="btn btn-on-dark" href="contact.html">Partner With Us</a>
+  </div>
+</aside>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top" data-screen-label="Hero">
+  <img class="bg" src="assets/img-01.jpg" alt="Sunrise over a green-energy facility and farmland" />
+  <div class="grade"></div>
+  <div class="glow"></div>
+  <div class="wrap hero-in">
+    <div class="eyebrow on-dark">India's First B2C Circular Economy Model</div>
+    <h1>India's used cooking oil, <span class="g">turned into the fuel the world demands.</span></h1>
+    <p class="sub">Collect · Refine · Convert · Export — biodiesel and sustainable aviation fuel, from a plant that already runs.</p>
+    <div class="cta">
+      <a class="btn btn-gold" href="contact.html">Partner With Us <span class="ar">→</span></a>
+      <a class="btn btn-on-dark" href="https://sengoalpledgeform.netlify.app/">Take the Pledge</a>
+    </div>
+    <div class="rail">
+      <div class="m"><div class="v">6.2B litres</div><div class="k">UCO wasted in India / year</div></div>
+      <div class="m"><div class="v">100+ families</div><div class="k">Pledged to stop reuse</div></div>
+      <div class="m"><div class="v">Since Nov 2025</div><div class="k">Plant operational</div></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ============ PROBLEM ============ -->
+<section class="block problem" id="problem" data-screen-label="The Problem">
+  <div class="wrap">
+    <div class="sect-head reveal">
+      <div class="eyebrow">The Problem We're Solving</div>
+      <h2 class="sect-title">India's Hidden Oil Crisis</h2>
+      <p class="lead">Every year India generates an enormous volume of used cooking oil — and almost none of it is safely recovered. The cost is paid in public health and polluted water.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="prob-stats reveal">
+        <div class="pstat"><div class="big gold">6.2B</div><div class="txt"><h4>Litres of used cooking oil</h4><p>Generated across India every single year.</p></div></div>
+        <div class="pstat"><div class="big">3×</div><div class="txt"><h4>Higher health risk</h4><p>Reused cooking oil is linked to a sharply higher risk of cancer and heart disease.</p></div></div>
+        <div class="pstat"><div class="big" style="font-size:clamp(1.4rem,2.6vw,2rem);">Most of it</div><div class="txt"><h4>Never recovered</h4><p>Re-enters the food chain illegally, or is dumped into drains and local water bodies.</p></div></div>
+      </div>
+      <div class="prob-media reveal">
+        <img src="assets/img-02.jpg" alt="Reused cooking oil at a street stall" />
+        <div class="tag">Reused oil quietly re-enters the food chain through street kitchens.</div>
+      </div>
+    </div>
+    <p class="closer reveal">Sengoal exists to <span class="g">close this gap.</span></p>
+  </div>
+</section>
+
+<!-- ============ LOOP ============ -->
+<section class="block loop" id="loop" data-screen-label="The Loop">
+  <div class="wrap">
+    <div class="sect-head reveal">
+      <div class="eyebrow">Our Circular Value Chain</div>
+      <h2 class="sect-title">India's First B2C ESG Model</h2>
+      <p class="lead">One feedstock moves through a single closed loop — from the kitchen, back to clean energy and global markets.</p>
+    </div>
+    <div class="loop-steps">
+      <div class="lstep reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-6 8 6"/><path d="M6 10v9h12v-9"/><path d="M10 19v-5h4v5"/></svg></div><div class="n">01</div><h4>Fresh Oil Delivered</h4><p>Lab-certified, refined cooking oil delivered to homes, kitchens and temples.</p></div>
+      <div class="lstep reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-3.6 4-6 6.6-6 9.6a6 6 0 0 0 12 0c0-3-2.4-5.6-6-9.6z"/><path d="M9.5 13.5a2.5 2.5 0 0 0 5 0"/></svg></div><div class="n">02</div><h4>UCO Collection</h4><p>Used cooking oil collected back from homes, kitchens and temples.</p></div>
+      <div class="lstep reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="7" width="12.5" height="9" rx="1.2"/><path d="M14 10h3.6l3 3v3H14z"/><circle cx="6" cy="18.4" r="1.8"/><circle cx="17.5" cy="18.4" r="1.8"/></svg></div><div class="n">03</div><h4>Safe Transport</h4><p>Tracked, compliant logistics carry the feedstock to our plant.</p></div>
+      <div class="lstep reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V11l5 3V11l5 3V8l5 3v10z"/><line x1="2.5" y1="21" x2="21.5" y2="21"/></svg></div><div class="n">04</div><h4>Upgrade to Green Fuel</h4><p>Refined into clean biodiesel and sustainable aviation fuel.</p></div>
+      <div class="lstep reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15 0 18M12 3c-2.5 2.6-2.5 15 0 18"/></svg></div><div class="n">05</div><h4>Global Impact</h4><p>Shipped to Europe and Asia as premium clean fuel.</p></div>
+    </div>
+    <div class="moat reveal">
+      <div>
+        <h3>The consumer loop is the moat</h3>
+        <p>Households order fresh, lab-certified oil — and return the used oil in a Sengoal-provided specialised tin fitted with an IoT system that automatically measures the oil level. One loop secures a proprietary, below-market feedstock, builds a consumer brand, and generates quantifiable ESG impact.</p>
+        <div class="chiprow">
+          <span class="chip2">Proprietary feedstock</span>
+          <span class="chip2">Consumer brand</span>
+          <span class="chip2">IoT automated collection</span>
+          <span class="chip2">Measurable ESG</span>
+        </div>
+      </div>
+      <div class="moat-media"><img src="assets/img-04.jpg" alt="Cooking oil, a lit Deepam lamp and a fuel nozzle arranged in a circle of leaves" /></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCTS ============ -->
+<section class="block products" id="products" data-screen-label="Products">
+  <div class="wrap">
+    <div class="sect-head reveal">
+      <div class="eyebrow">Ecosystem Products</div>
+      <h2 class="sect-title">Four revenue lines, one feedstock</h2>
+      <p class="lead">A commissioned multi-product oil plant turning everyday oil into honest, useful products — and clean energy. Two products are live today; biodiesel and SAF go live on the RUCO licence.</p>
+    </div>
+    <div class="prod-grid">
+
+      <!-- Cooking oil -->
+      <article class="pcard reveal">
+        <div class="ph"><img src="assets/img-05.jpg" alt="A family cooking together at home" /><span class="badge live"><span class="dot"></span>Live today</span></div>
+        <div class="body">
+          <h3>Refined Cooking Oil</h3>
+          <div class="role">Revenue Line 01</div>
+          <p>Fresh, lab-certified oil for everyday kitchens — the product that anchors the entire collection loop and brings households into the system.</p>
+        </div>
+      </article>
+
+      <!-- Deepam + temple loop folded in -->
+      <article class="pcard reveal">
+        <div class="ph"><img src="assets/img-09.jpg" alt="A priest pouring oil over a temple idol amid oil lamps" /><span class="badge live"><span class="dot"></span>Live · Confirmed LOI</span></div>
+        <div class="body">
+          <h3>Deepam Lamp Oil</h3>
+          <div class="role">Revenue Line 02 · Temple Loop</div>
+          <p>Pure, traditional lamp oil for homes and temples — purified from ritual oil collected at South Indian shrines.</p>
+          <div class="temple-loop">
+            <div class="tl-tag">"The temple's waste returns as its light."</div>
+            <div class="tl-steps">
+              <div class="tl"><div class="num">01</div><div class="nm">Sacred Offering</div></div>
+              <div class="sep">›</div>
+              <div class="tl"><div class="num">02</div><div class="nm">We Collect</div></div>
+              <div class="sep">›</div>
+              <div class="tl"><div class="num">03</div><div class="nm">We Refine</div></div>
+              <div class="sep">›</div>
+              <div class="tl"><div class="num">04</div><div class="nm">Back as Deepam</div></div>
+            </div>
+            <div class="loi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-.6 4"/><polyline points="21 4 21 9 16 9"/></svg>Confirmed LOI — 250 tonnes / month offtake</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Biodiesel -->
+      <article class="pcard reveal">
+        <div class="ph"><img src="assets/img-11.jpg" alt="Inside the Sengoal biofuel refinery" /><span class="badge pending"><span class="dot"></span>Pending RUCO</span></div>
+        <div class="body">
+          <h3>Biodiesel</h3>
+          <div class="role">Revenue Line 03</div>
+          <p>Used cooking oil cleaned and converted at Anekal, then sold to domestic biodiesel manufacturers. Soap-base by-products add a further revenue stream.</p>
+        </div>
+      </article>
+
+      <!-- SAF -->
+      <article class="pcard reveal">
+        <div class="ph"><img src="assets/img-12.jpg" alt="Aircraft taking off at sunrise" /><span class="badge pending"><span class="dot"></span>Pending RUCO</span></div>
+        <div class="body">
+          <h3>Sustainable Aviation Fuel</h3>
+          <div class="role">Revenue Line 04</div>
+          <p>UCO upgraded into sustainable aviation fuel, supplied via Europe and other international markets through our export partners.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ KITCHEN TO CLOUD (SAF feature) ============ -->
+<section class="block saf" data-screen-label="Biodiesel & SAF">
+  <img class="bg" src="assets/img-12.jpg" alt="Aircraft taking off at sunrise" />
+  <div class="grade"></div>
+  <div class="wrap saf-in">
+    <div class="sect-head reveal">
+      <div class="eyebrow on-dark">Biodiesel &amp; SAF</div>
+      <h2 class="sect-title">From Kitchen to Cloud</h2>
+      <p class="lead">Used cooking oil, upgraded into sustainable aviation fuel — and into a mandated global market.</p>
+    </div>
+    <div class="saf-stats reveal">
+      <div class="s"><div class="v">$5.3B</div><div class="k">Global SAF market by 2030</div></div>
+      <div class="s"><div class="v">2% → 70%</div><div class="k">EU SAF mandate, 2025–2050</div></div>
+      <div class="s"><div class="v">Lowest</div><div class="k">Carbon footprint of all SAF feedstocks</div></div>
+    </div>
+    <div class="saf-partners reveal">
+      <div class="ppill"><span class="pt">FatHopes Energy</span><span class="ps">SAF upgrading · Malaysia</span></div>
+      <div class="ppill"><span class="pt">Muzuir</span><span class="ps">Biodiesel &amp; SAF · Europe</span></div>
+      <div class="ppill"><span class="pt">ASEAN + Middle East</span><span class="ps">Active pipeline discussions</span></div>
+    </div>
+    <div class="ruco reveal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5l2.1 1.5 2.6-.2.9 2.4 2.2 1.4-.7 2.5.7 2.5-2.2 1.4-.9 2.4-2.6-.2L12 21.5l-2.1-1.6-2.6.2-.9-2.4-2.2-1.4.7-2.5-.7-2.5 2.2-1.4.9-2.4 2.6.2z"/><polyline points="9 12 11 14 15 9.5"/></svg>Biodiesel &amp; SAF go live once the RUCO licence is granted — expected in the next 30–45 days.</div>
+    <p class="align reveal">Aligned with the Government of India's Green Fuel Mission &amp; ICAO net-zero 2050.</p>
+  </div>
+</section>
+
+<!-- ============ TECHNOLOGY ============ -->
+<section class="block technology" id="technology" data-screen-label="Technology">
+  <div class="wrap">
+    <div class="sect-head reveal">
+      <div class="eyebrow">Technology</div>
+      <h2 class="sect-title">Automated UCO collection, by design</h2>
+      <p class="lead">Our collection process is built to run automatically — live, demonstrable proof that the model works, with every litre traceable from source to plant.</p>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-media reveal">
+        <img src="assets/img-11.jpg" alt="Inside the Sengoal biofuel refinery at Anekal" />
+        <div class="plant"><b>Commissioned multi-product plant · Anekal</b><span>2.5-acre site, with room to scale.</span></div>
+      </div>
+      <div class="tlist reveal">
+        <div class="titem"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12a7 7 0 0 1 14 0"/><path d="M8.5 12a3.5 3.5 0 0 1 7 0"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><line x1="12" y1="13.4" x2="12" y2="21"/></svg></div><div><h4>IoT smart collection</h4><p>Connected collection containers digitise every litre of UCO, building an auditable, automated feedstock pipeline.</p></div></div>
+        <div class="titem"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="7" width="12.5" height="9" rx="1.2"/><path d="M14 10h3.6l3 3v3H14z"/><circle cx="6" cy="18.4" r="1.8"/><circle cx="17.5" cy="18.4" r="1.8"/></svg></div><div><h4>Tracked, compliant logistics</h4><p>Chain-of-custody transport keeps the feedstock auditable from kitchen to refinery.</p></div></div>
+        <div class="titem"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="3" width="12" height="18" rx="2"/><line x1="10" y1="18" x2="14" y2="18"/></svg></div><div><h4>Pledge platform</h4><p>Households pledge to stop reusing oil and order fresh oil through a simple digital platform.</p></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRACTION ============ -->
+<section class="block traction" id="traction" data-screen-label="Traction">
+  <div class="wrap">
+    <div class="sect-head reveal">
+      <div class="eyebrow">Community &amp; Scale</div>
+      <h2 class="sect-title">A movement, not just a business</h2>
+      <p class="lead">A plant that already runs, real products in market, and a growing community of families choosing safe oil.</p>
+    </div>
+    <div class="kpi-row reveal">
+      <div class="kpi"><div class="v">Since Nov 2025</div><div class="k">Operational, generating revenue</div></div>
+      <div class="kpi"><div class="v">Anekal · 2.5 ac</div><div class="k">Commissioned multi-product plant</div></div>
+      <div class="kpi"><div class="v">100+ families</div><div class="k">Pledged to stop reusing oil</div></div>
+      <div class="kpi"><div class="v">250 t/mo</div><div class="k">Confirmed Deepam oil LOI</div></div>
+    </div>
+    <div class="ladder">
+      <div class="steps3 reveal">
+        <div class="lr now"><div class="num">100+</div><div class="bar"><i style="width:10%"></i></div><div class="meta"><b>Families pledged</b><span>By today — and growing</span></div></div>
+        <div class="lr"><div class="num">1,000</div><div class="bar"><i style="width:30%"></i></div><div class="meta"><b>Families</b><span>Target · next 2 months</span></div></div>
+        <div class="lr"><div class="num">10,000</div><div class="bar"><i style="width:62%"></i></div><div class="meta"><b>Families</b><span>Target · end of 2026</span></div></div>
+        <div class="cats"><span>Households</span><span>Restaurants</span><span>Cloud Kitchens</span><span>Food Manufacturers</span><span>Temples</span></div>
+      </div>
+      <div class="health reveal">
+        <h3>Protecting every Indian plate</h3>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Directly prevents cancer &amp; chronic disease from contaminated oil.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Cuts off the illegal re-entry of waste oil into food supply chains.</span></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Keeps oil out of drains and protects local water bodies.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISION ============ -->
+<section class="block vision" id="vision" data-screen-label="Vision">
+  <img class="mark-wm" src="assets/mark_transparent.png" alt="" aria-hidden="true" />
+  <div class="wrap vision-in">
+    <div class="sect-head reveal">
+      <div class="eyebrow on-dark">Positioning &amp; Roadmap</div>
+      <h2 class="sect-title">The Road Ahead</h2>
+      <p class="lead" style="color:#CFE0C2;">A near-free Indian waste stream, converted into clean fuel the world is mandated to buy.</p>
+    </div>
+    <div class="vmkt reveal">
+      <div class="s"><div class="v">$3.82B</div><div class="k">India biofuels market, 2025</div></div>
+      <div class="s"><div class="v">22.2%</div><div class="k">Biofuels market CAGR</div></div>
+      <div class="s"><div class="v">2% → 70%</div><div class="k">EU SAF mandate, 2025–2050</div></div>
+    </div>
+    <div class="phases reveal">
+      <div class="phase now"><div class="pl">Phase 01 · Now</div><h4>Today</h4><p>Cooking &amp; Deepam oil generating revenue from a plant that already runs.</p></div>
+      <div class="phase"><div class="pl">Phase 02 · Near</div><h4>Next 12 Months</h4><p>The temple loop scales and UCO-to-biodiesel goes live on the RUCO licence.</p></div>
+      <div class="phase"><div class="pl">Phase 03 · Future</div><h4>The Horizon</h4><p>SAF exported to Europe — one near-free feedstock, four revenue lines.</p></div>
+    </div>
+    <p class="vclose reveal">Waste into infrastructure. <span class="g">Infrastructure into clean energy.</span></p>
+  </div>
+</section>
+
+<!-- ============ TEAM ============ -->
+<section class="block team" id="team" data-screen-label="Team">
+  <div class="wrap">
+    <div class="sect-head reveal">
+      <div class="eyebrow">The Team</div>
+      <h2 class="sect-title">Run by Visionaries</h2>
+    </div>
+    <div class="founders">
+      <div class="fcard reveal">
+        <div class="fc-photo"><img src="assets/team-ram.jpeg" alt="Ram, Director &amp; Co-Founder" /></div>
+        <div class="nm">Ram Kumar</div><div class="rl">Director &amp; Co-Founder</div>
+      </div>
+      <div class="fcard reveal">
+        <div class="fc-photo"><img src="assets/team-naveen.jpeg" alt="Naveen, Director &amp; Co-Founder" /></div>
+        <div class="nm">Naveen N</div><div class="rl">Director &amp; Co-Founder</div>
+      </div>
+    </div>
+    <div class="team-grid">
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-kaavya.jpeg" alt="Kaavya K" /></div><div class="nm">Kaavya K</div><div class="rl">Lead Campaign Manager</div></div>
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-divya.jpeg" alt="Divya P" /></div><div class="nm">Divya P</div><div class="rl">Marketing Lead</div></div>
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-gopika.jpeg" alt="Gopika S" /></div><div class="nm">Gopika S</div><div class="rl">Pledge &amp; Crowdfunding Lead</div></div>
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-kavika.jpeg" alt="Kavika P" /></div><div class="nm">Kavika P</div><div class="rl">Legal Lead</div></div>
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-nihitha.jpeg" alt="Nihitha S" /></div><div class="nm">Nihitha S</div><div class="rl">Co-Head of Tech · IoT</div></div>
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-sherine.jpeg" alt="Sherine J" /></div><div class="nm">Sherine J</div><div class="rl">Co-Head of Tech · Systems</div></div>
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-vaishali.jpeg" alt="Vaishali" /></div><div class="nm">Vaishali </div><div class="rl">Co-Head of Tech · Web &amp; Docs</div></div>  
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/naveens.jpeg" alt="Naveen S" /></div><div class="nm">Naveen S</div><div class="rl">Team Member</div></div>     
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA / CONTACT ============ -->
+<section class="block cta-band" id="contact" data-screen-label="Contact">
+  <div class="wrap reveal">
+    <h2>Join the loop.</h2>
+    <p>Pledge to stop reusing cooking oil, or partner with us to scale India's first B2C circular energy model.</p>
+    <div class="cta">
+      <a class="btn btn-dark" href="https://sengoalpledgeform.netlify.app/">Take the Pledge</a>
+      <a class="btn btn-lineDark" href="contact.html">Partner With Us</a>
+    </div>
+    <div class="contact-meta">
+      <a href="mailto:ram@sengoalenergy.com">ram@sengoalenergy.com</a>
+      <a href="tel:+919731467183">+91 973-146-7183</a>
+      <a href="https://www.sengoalenergy.com" target="_blank" rel="noopener">www.sengoalenergy.com</a>
+      <span>Bengaluru, Karnataka, India</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer data-screen-label="Footer">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <img src="assets/logo_light.png" alt="Sengoal" />
+        <p>Turning India's used cooking oil into cleaner communities, renewable fuel and a greener future.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Explore</h5>
+        <a href="#problem">The Problem</a>
+        <a href="#loop">The Loop</a>
+        <a href="#products">Products</a>
+        <a href="#technology">Technology</a>
+        <a href="#vision">Vision</a>
+        <a href="#team">Team</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="mailto:ram@sengoalenergy.com">ram@sengoalenergy.com</a>
+        <a href="mailto:naveen@sengoalenergy.com">naveen@sengoalenergy.com</a>
+        <a href="tel:+919731467183">+91 973-146-7183</a>
+        <a href="https://www.sengoalenergy.com" target="_blank" rel="noopener">www.sengoalenergy.com</a>
+        <p>Bengaluru, Karnataka, India</p>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 Sengoal Bio Teja Pvt Ltd · Circular Today. Greener Tomorrow.</span>
+      <span>India's First B2C Circular Economy Model</span>
+    </div>
+  </div>
+</footer>
+
+<a class="fab-partner" id="fabPartner" href="contact.html">Partner With Us <span class="fab-ar">→</span></a>
+
+<script>
+  // sticky nav state
+  var nav = document.getElementById('nav');
+  function onScroll(){ nav.classList.toggle('scrolled', window.scrollY > 24); }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  // mobile menu
+  var hamb = document.getElementById('hamb');
+  var menu = document.getElementById('mobileMenu');
+  var scrim = document.getElementById('navScrim');
+  function setMenu(open){ hamb.classList.toggle('open',open); menu.classList.toggle('open',open); scrim.classList.toggle('open',open); }
+  hamb.addEventListener('click', function(){ setMenu(!menu.classList.contains('open')); });
+  scrim.addEventListener('click', function(){ setMenu(false); });
+  menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setMenu(false); }); });
+
+  // reveal on scroll
+  // floating partner CTA
+  var fab = document.getElementById('fabPartner');
+  var hero = document.querySelector('.hero');
+  function onFab(){
+    var heroBottom = hero ? hero.getBoundingClientRect().bottom : 0;
+    fab.classList.toggle('show', heroBottom < 0);
+  }
+  window.addEventListener('scroll', onFab, {passive:true}); onFab();
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.14, rootMargin:'0px 0px -8% 0px'});
+  document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+</script>
+
+<!-- ============ TWEAKS (authoring aid; hidden until toggled) ============ -->
+<div id="tweaks-root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accent": "Gold",
+    "bg": "Cream",
+    "headline": 1.05
+  }/*EDITMODE-END*/;
+  function TweakApp(){
+    const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+    React.useEffect(function(){
+      const r = document.documentElement.style;
+      const gold = t.accent === 'Gold';
+      r.setProperty('--accent', gold ? '#F2B233' : '#2E7D32');
+      r.setProperty('--accent-ink', gold ? '#0C2A20' : '#FFFFFF');
+      r.setProperty('--bg', t.bg === 'Cream' ? '#F4F2E8' : '#FBFAF5');
+      r.setProperty('--h-scale', String(t.headline));
+    }, [t]);
+    return (
+      <TweaksPanel title="Tweaks">
+        <TweakSection label="Brand" />
+        <TweakRadio label="Accent" value={t.accent} options={['Gold','Leaf']} onChange={(v)=>setTweak('accent', v)} />
+        <TweakRadio label="Background" value={t.bg} options={['Cream','Warm white']} onChange={(v)=>setTweak('bg', v)} />
+        <TweakSection label="Type" />
+        <TweakSlider label="Headline size" value={t.headline} min={0.85} max={1.15} step={0.05} onChange={(v)=>setTweak('headline', v)} />
+      </TweaksPanel>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('tweaks-root')).render(<TweakApp/>);
+</script>
+</body>
+</html>
