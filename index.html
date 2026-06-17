@@ -305,7 +305,7 @@
   .phase h4{font-size:clamp(1.3rem,2.2vw,1.7rem);color:#fff;margin:14px 0 0;}
   .phase p{color:#C9DBBE;margin-top:12px;font-size:.97rem;line-height:1.6;}
   .vclose{margin-top:clamp(48px,6vw,72px);padding-top:clamp(36px,4vw,48px);border-top:1px solid rgba(255,255,255,.16);
-    font-size:clamp(1.6rem,3.6vw,3rem);font-weight:900;letter-spacing:-.03em;color:#fff;max-width:22ch;line-height:1.05;}
+    font-family:var(--font-serif);font-size:clamp(1.6rem,3.6vw,3rem);font-weight:500;letter-spacing:-.01em;color:#fff;max-width:22ch;line-height:1.05;}
   .vclose .g{color:var(--accent);}
 
   /* ============ TEAM ============ */
@@ -336,6 +336,35 @@
   .cta-band .btn-lineDark:hover{background:var(--forest);color:#fff;}
   .contact-meta{margin-top:34px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;font-size:.92rem;font-weight:600;color:#42330c;}
   .contact-meta a{text-decoration:none;border-bottom:1px solid rgba(66,51,12,.3);}
+
+  /* ============ PARTNER ============ */
+  .partnership { background:var(--paper); padding:clamp(60px,8vw,100px) 0; }
+  .partner-card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:clamp(32px,5vw,56px); display:grid; grid-template-columns:1fr auto; gap:clamp(24px,4vw,48px); align-items:center; max-width:860px; margin:0 auto; transition:box-shadow .4s ease; }
+  .partner-card:hover { box-shadow:0 12px 36px rgba(0,0,0,.04); }
+  .partner-card .ico { width:clamp(64px,8vw,90px); height:clamp(64px,8vw,90px); background:rgba(168,198,108,.14); border:1px solid rgba(168,198,108,.26); color:var(--leaf); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .partner-card .ico svg { width:42%; height:42%; }
+  .partner-card h3 { font-size:clamp(1.5rem,3vw,2.1rem); margin:12px 0 16px; }
+  .partner-card p { font-size:.98rem; color:var(--ink-soft); line-height:1.6; margin-bottom:16px; }
+  .partner-card p:last-of-type { margin-bottom:0; }
+  .partner-card .link { display:inline-flex; align-items:center; gap:6px; font-size:1.05rem; font-weight:600; color:var(--forest); margin-top:20px; transition:color .3s; cursor:pointer; border-bottom:1px solid rgba(14,61,47,.2); padding-bottom:2px; }
+  .partner-card .link:hover { color:var(--leaf); border-color:var(--leaf); }
+  @media (max-width:768px){
+    .partner-card { grid-template-columns:1fr; text-align:center; }
+    .partner-card .ico { margin:0 auto; }
+    .partner-card .eyebrow { justify-content:center; }
+  }
+
+  /* ============ MODAL ============ */
+  .modal-overlay { position:fixed; inset:0; background:rgba(8,32,24,.8); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); z-index:999; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:opacity .4s, visibility .4s; padding:20px; }
+  .modal-overlay.open { opacity:1; visibility:visible; }
+  .modal-content { background:var(--paper); border-radius:16px; max-width:800px; width:100%; max-height:90vh; overflow-y:auto; position:relative; padding:clamp(32px,5vw,48px); transform:translateY(20px); transition:transform .4s; }
+  .modal-overlay.open .modal-content { transform:translateY(0); }
+  .modal-close { position:absolute; top:20px; right:20px; background:rgba(14,61,47,.08); border:none; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--forest); font-size:1.2rem; transition:background .2s; }
+  .modal-close:hover { background:rgba(14,61,47,.16); }
+  .modal-body h2 { font-size:clamp(2rem,4vw,2.8rem); color:var(--forest); margin-bottom:8px; line-height:1.1; font-family:var(--font-serif); font-weight:500; letter-spacing:-.01em; }
+  .modal-body h3 { font-size:clamp(1.4rem,2vw,1.8rem); color:var(--leaf); margin:32px 0 16px; font-family:var(--font-serif); font-weight:500; letter-spacing:-.01em; }
+  .modal-body h4 { font-size:1.1rem; color:var(--ink); margin-bottom:12px; font-weight:700; font-family:var(--font-serif); }
+  .modal-body p { font-size:1rem; color:var(--ink-soft); line-height:1.7; margin-bottom:16px; }
 
   /* ============ FOOTER ============ */
   footer{background:var(--forest-deep);color:#C9DBBE;padding:clamp(56px,7vw,80px) 0 36px;}
@@ -708,7 +737,7 @@
       <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-gopika.jpeg" alt="Gopika S" /></div><div class="nm">Gopika S</div><div class="rl">Pledge &amp; Crowdfunding Lead</div></div>
       <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-kavika.jpeg" alt="Kavika P" /></div><div class="nm">Kavika P</div><div class="rl">Legal Lead</div></div>
       <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-nihitha.jpeg" alt="Nihitha S" /></div><div class="nm">Nihitha S</div><div class="rl">Co-Head of Tech · IoT</div></div>
-      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-sherine.jpeg" alt="Sherine J" /></div><div class="nm">Sherine J</div><div class="rl">Co-Head of Tech · Systems</div></div>
+      <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-sherine.jpeg" alt="Sherine Joanna" /></div><div class="nm">Sherine Joanna</div><div class="rl">Co-Head of Tech · Systems</div></div>
       <div class="tmember reveal"><div class="tm-photo"><img src="assets/team-vaishali.jpeg" alt="Vaishali" /></div><div class="nm">Vaishali </div><div class="rl">Co-Head of Tech · Web &amp; Docs</div></div>  
       <div class="tmember reveal"><div class="tm-photo"><img src="assets/naveens.jpeg" alt="Naveen S" /></div><div class="nm">Naveen S</div><div class="rl">Team Member</div></div>     
     </div>
@@ -729,6 +758,29 @@
       <a href="tel:+919731467183">+91 973-146-7183</a>
       <a href="https://www.sengoalenergy.com" target="_blank" rel="noopener">www.sengoalenergy.com</a>
       <span>Bengaluru, Karnataka, India</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PARTNER ============ -->
+<section class="block partnership" id="partner" data-screen-label="Partner">
+  <div class="wrap reveal">
+    <div class="partner-card">
+      <div class="text">
+        <div class="eyebrow">Our Community Partner</div>
+        <h3>NAYA Foundation</h3>
+        <p>Sengoal is proud to collaborate with NAYA Foundation in supporting our pledge and used cooking oil (UCO) collection initiatives. Through this partnership, we aim to strengthen community participation, encourage responsible waste management, and create meaningful environmental impact at the grassroots level.</p>
+        <p>Together, we are working to turn small individual actions into measurable collective change.</p>
+        <a class="link" onclick="openNayaModal()">Learn More About NAYA Foundation <span style="font-size:1.1em; line-height:0;">→</span></a>
+      </div>
+      <div class="ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+      </div>
     </div>
   </div>
 </section>
@@ -766,6 +818,30 @@
   </div>
 </footer>
 
+<!-- ============ MODAL ============ -->
+<div class="modal-overlay" id="nayaModal">
+  <div class="modal-content">
+    <button class="modal-close" aria-label="Close" onclick="closeNayaModal()">✕</button>
+    <div class="modal-body">
+      <h2>About NAYA Foundation</h2>
+      <h4>On the Path of Vivekananda</h4>
+      <p>Inspired by Swami Vivekananda's powerful proclamation, "Give me one hundred strong youth, and I shall build a mighty nation," the organization "Namma Assembly Youth Association", popularly known as NAYA, was born.</p>
+      <p>NAYA was formally launched on January 12, 2015, coinciding with the birth anniversary of Swami Vivekananda, with just 30 young members. Initially, it began its work at the assembly constituency level. The very first program, organized on March 15, 2015, at the Adugodi Community Hall in the BTM Assembly Constituency, saw the participation of over 500 youths, igniting a new sense of hope and enthusiasm.</p>
+      <p>Today, thousands of young people have associated themselves with NAYA and are walking the path shown by Vivekananda. What began in a single assembly constituency has now spread its roots across every assembly constituency and ward of Bengaluru. Numerous youths, driven by self-motivation, have become part of NAYA and are actively demonstrating social responsibility—this is no exaggeration.</p>
+      <p>The guiding force behind NAYA is Bharath Bushan. From his student days itself, he has nurtured a deep concern for people and for life. Today, Bharath Bushan is a well-known and respected name in the social sphere. Always among the people, actively sharing in their joys and sorrows, he carries an unwavering desire to contribute meaningfully to society. This very passion gave birth to NAYA. Even today, Bharath Bushan is regarded by many as a close friend, a relative, and a brother.</p>
+      <p>The core objective of NAYA is "Service and Organization." Through organized service, the organization continuously works to instill and spread the spirit of Vivekananda's thoughts everywhere and in everyone, making it a living, breathing mission of everyday life. That is why NAYA has grown steadily and dynamically as a platform for like-minded individuals.</p>
+      <p>NAYA's service during the COVID-19 pandemic was truly memorable—providing food, medical assistance, and financial support, and consistently responding to people's suffering.</p>
+      <p>Through initiatives such as environmental awareness, cleanliness drives, de-addiction campaigns, blood donation camps, health camps, and by commemorating Swami Vivekananda's ideals on his birth anniversary via "Viveka Jagruti Shobha Yatras" in every assembly constituency, NAYA has played a significant role in social awakening. The organization has also honored grassroots service providers—sanitation workers, ASHA workers, doctors, police personnel, anganwadi workers, and many others who serve society tirelessly. In this way, NAYA has created a new chapter of social commitment.</p>
+      <p>Today, NAYA celebrates its ten glorious years. Sustaining an organization for a full decade with continuity, commitment, and strong ideological grounding—while building a robust team of dedicated youth—is no easy task. NAYA has achieved exactly that. Not stopping there, it has taken yet another step forward by launching the NAYA Foundation, dedicated to service to the nation.</p>
+
+      <h3>About the Founder: Bharath Bushan</h3>
+      <p>Bharath Bushan is a passionate youth leader, political activist, and social worker who founded the NAYA Foundation, an NGO dedicated to empowering young people and supporting their personal, educational, and community development. With a strong belief that youth are the catalysts of positive change, Bharath started the foundation to create meaningful opportunities for learning, leadership, and service.</p>
+      <p>Under his leadership, NAYA Foundation focuses on programs that strengthen skills, confidence, and social awareness among young individuals. The foundation organizes workshops, mentorship sessions, community projects, and events that help youth discover their potential, develop life skills, and engage with real-world challenges.</p>
+      <p>Bharath's vision is to nurture a generation of socially-responsible, confident, and creative young leaders who can contribute positively to society. Through his work with the foundation, he encourages young people to step up, participate in community development, and use their talents to make a lasting impact. Driven by empathy, innovation, and a commitment to youth development, Bharath Bushan continues to inspire and mobilize young minds toward collaboration, learning, and action for a better future.</p>
+    </div>
+  </div>
+</div>
+
 <a class="fab-partner" id="fabPartner" href="contact.html">Partner With Us <span class="fab-ar">→</span></a>
 
 <script>
@@ -792,6 +868,12 @@
     fab.classList.toggle('show', heroBottom < 0);
   }
   window.addEventListener('scroll', onFab, {passive:true}); onFab();
+
+  // modal
+  var nayaModal = document.getElementById('nayaModal');
+  function openNayaModal() { nayaModal.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeNayaModal() { nayaModal.classList.remove('open'); document.body.style.overflow = ''; }
+  nayaModal.addEventListener('click', function(e) { if(e.target === nayaModal) closeNayaModal(); });
 
   var io = new IntersectionObserver(function(entries){
     entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
